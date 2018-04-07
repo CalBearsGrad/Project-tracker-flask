@@ -72,9 +72,9 @@ def get_project_by_title(title):
 
     row = db_cursor.fetchone()
 
-    print "Title: {title}".format(title=row[0])
-    print "Description: {description}".format(description=row[1])
-    print "Max Grade: {max_grade}".format(max_grade=row[2])
+    # print "Title: {title}".format(title=row[0])
+    # print "Description: {description}".format(description=row[1])
+    # print "Max Grade: {max_grade}".format(max_grade=row[2])
 
     return row
 
@@ -95,6 +95,23 @@ def get_project_by_github(github):
 
     return row
 
+
+def get_grade_for_student_project(project):
+    """Given a project title, returns the first name, last name, of every student
+    who conmpleted the project and their grade
+    """
+
+    QUERY = """
+         SELECT first_name, last_name, grade
+         FROM students
+         JOIN grades ON students.github = grades.student_github
+         WHERE grades.project_title = :project_title
+    """
+    db_cursor = db.session.execute(QUERY, {'project_title': project})
+
+    row = db_cursor.fetchall()
+
+    return row
 
 def get_grade_by_github_title(github, title):
     """Print grade student received for a project."""
