@@ -120,8 +120,9 @@ def assign_grade(github, title, grade):
     """Assign a student a grade on an assignment and print a confirmation."""
 
     QUERY = """
-        INSERT INTO Grades (student_github, project_title, grade)
-          VALUES (:github, :title, :grade)
+        UPDATE grades
+        SET grade = :grade
+        WHERE project_title = :title AND student_github = :github
         """
 
     db_cursor = db.session.execute(QUERY, {'github': github,
@@ -220,7 +221,7 @@ def handle_input():
 if __name__ == "__main__":
     connect_to_db(app)
 
-    handle_input()
+    # handle_input()
 
     # To be tidy, we'll close our database connection -- though, since this
     # is where our program ends, we'd quit anyway.
